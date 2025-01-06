@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Futuristic Titanic Dashboard</title>
+        <link rel="stylesheet" href="/static/css/styles.css">
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    </head>
+<body>
+    <header>
+        <h1>Titanic Dashboard</h1>
+    </header>
+    <main>
+        <section class="stats">
+            <div>
+                <h2>Survival Rate</h2>
+                <p>{{ survival_rate }}%</p>
+            </div>
+            <div>
+                <h2>Class Distribution</h2>
+                <ul>
+                    {% for class, count in class_distribution.items() %}
+                    <li>Class {{ class }}: {{ count }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+        <section class="charts">
+            <h2>Visualizations</h2>
+            <div id="survival-chart"></div>
+            <div id="age-chart"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Futuristic Titanic Dashboard</p>
+    </footer>
+    <script>
+        fetch('/charts')
+            .then(response => response.json())
+            .then(data => {
+                const survivalChart = JSON.parse(data.survival_chart);
+                const ageChart = JSON.parse(data.age_histogram);
+                Plotly.newPlot('survival-chart', survivalChart.data, survivalChart.layout);
+                Plotly.newPlot('age-chart', ageChart.data, ageChart.layout);
+            });
+    </script>
+</body>
+</html>
